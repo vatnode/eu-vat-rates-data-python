@@ -26,9 +26,9 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/vatnode/eu-vat-rates-python"
-Repository = "https://github.com/vatnode/eu-vat-rates-python"
-"Bug Tracker" = "https://github.com/vatnode/eu-vat-rates-python/issues"
+Homepage = "https://github.com/vatnode/eu-vat-rates-data-python"
+Repository = "https://github.com/vatnode/eu-vat-rates-data-python"
+"Bug Tracker" = "https://github.com/vatnode/eu-vat-rates-data-python/issues"
 "npm package" = "https://www.npmjs.com/package/eu-vat-rates-data"
 
 [tool.hatch.build.targets.wheel]
