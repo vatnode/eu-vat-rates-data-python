@@ -91,5 +91,5 @@ jobs:
           git config user.name "vatnode-bot"
           git config user.email "bot@vatnode.dev"
           git add src/eu_vat_rates_data/eu_vat_rates.json pyproject.toml
-          git commit -m "chore: update VAT rates ${DATE} (v${VERSION})"
+          git diff --staged --quiet || git commit -m "chore: update VAT rates ${DATE} (v${VERSION})"
           git push
