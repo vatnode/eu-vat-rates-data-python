@@ -1,0 +1,38 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "eu-vat-rates-data"
+version = "2026.2.25"
+description = "EU VAT rates for all 27 member states + UK. Updated daily from EC TEDB, published automatically when rates change."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+authors = [{ name = "Iurii Rogulia", email = "iurii@rogulia.fi" }]
+keywords = ["vat", "eu", "european-union", "tax", "rates", "europe"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Office/Business :: Financial",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Typing :: Typed",
+]
+
+[project.urls]
+Homepage = "https://github.com/vatnode/eu-vat-rates-python"
+Repository = "https://github.com/vatnode/eu-vat-rates-python"
+"Bug Tracker" = "https://github.com/vatnode/eu-vat-rates-python/issues"
+"npm package" = "https://www.npmjs.com/package/eu-vat-rates-data"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/eu_vat_rates_data"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/", "README.md", "LICENSE"]

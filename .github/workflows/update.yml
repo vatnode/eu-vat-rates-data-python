@@ -1,0 +1,88 @@
+name: Update EU VAT Rates
+
+on:
+  schedule:
+    # Run 1 hour after the JS repo updates (which runs at 07:00 UTC)
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (show diff without publishing)'
+        type: boolean
+        default: false
+
+jobs:
+  update:
+    name: Fetch, bump & publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download latest VAT rates
+        run: |
+          curl -sf https://raw.githubusercontent.com/vatnode/eu-vat-rates-data/main/data/eu-vat-rates.json \
+            -o /tmp/latest.json
+
+      - name: Check for rate changes
+        id: diff
+        run: |
+          CURRENT=$(python3 -c "import json,sys; print(json.dumps(json.load(open(sys.argv[1]))['rates'],sort_keys=True))" src/eu_vat_rates_data/eu_vat_rates.json)
+          LATEST=$(python3 -c "import json,sys; print(json.dumps(json.load(open(sys.argv[1]))['rates'],sort_keys=True))" /tmp/latest.json)
+          if [ "$CURRENT" = "$LATEST" ]; then
+            echo "rates_changed=false" >> "$GITHUB_OUTPUT"
+            echo "No rate changes."
+          else
+            echo "rates_changed=true" >> "$GITHUB_OUTPUT"
+            echo "Rate changes detected."
+          fi
+
+      - name: Update bundled data
+        if: steps.diff.outputs.rates_changed == 'true'
+        run: cp /tmp/latest.json src/eu_vat_rates_data/eu_vat_rates.json
+
+      - name: Set up Python
+        if: steps.diff.outputs.rates_changed == 'true' && github.event.inputs.dry_run != 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install build tools
+        if: steps.diff.outputs.rates_changed == 'true' && github.event.inputs.dry_run != 'true'
+        run: pip install hatch
+
+      - name: Bump version and build
+        if: steps.diff.outputs.rates_changed == 'true' && github.event.inputs.dry_run != 'true'
+        run: |
+          VERSION=$(date -u +%Y.%-m.%-d)
+          # Append counter if version already published today
+          EXISTING=$(pip index versions eu-vat-rates-data 2>/dev/null | grep -oP '(?<=Available versions: )[\d.]+' || echo "")
+          if echo "$EXISTING" | grep -qw "$VERSION"; then
+            COUNT=1
+            while echo "$EXISTING" | grep -qw "${VERSION}.${COUNT}"; do
+              COUNT=$((COUNT + 1))
+            done
+            VERSION="${VERSION}.${COUNT}"
+          fi
+          echo "Publishing version: $VERSION"
+          sed -i "s/^version = .*/version = \"$VERSION\"/" pyproject.toml
+          hatch build
+
+      - name: Publish to PyPI
+        if: steps.diff.outputs.rates_changed == 'true' && github.event.inputs.dry_run != 'true'
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_TOKEN }}
+
+      - name: Commit and push
+        if: steps.diff.outputs.rates_changed == 'true' && github.event.inputs.dry_run != 'true'
+        run: |
+          DATE=$(date -u +%Y-%m-%d)
+          VERSION=$(python3 -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])")
+          git config user.name "vatnode-bot"
+          git config user.email "bot@vatnode.dev"
+          git add src/eu_vat_rates_data/eu_vat_rates.json pyproject.toml
+          git commit -m "chore: update VAT rates ${DATE} (v${VERSION})"
+          git push
