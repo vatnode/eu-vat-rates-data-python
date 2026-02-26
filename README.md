@@ -108,7 +108,7 @@ get_rate("PT")
 
 Rates are fetched from the **European Commission Taxes in Europe Database (TEDB)**:
 
-- Canonical data repo: **https://github.com/vatnode/eu-vat-rates-data-js**
+- Canonical data repo: **https://github.com/vatnode/eu-vat-rates-data**
 - Refreshed: **daily at 08:00 UTC**
 - Published to PyPI only when actual rates change (not on date-only updates)
 
