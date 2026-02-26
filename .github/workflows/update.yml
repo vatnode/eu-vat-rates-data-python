@@ -27,13 +27,13 @@ jobs:
 
       - name: Download latest VAT rates
         run: |
-          curl -sf https://raw.githubusercontent.com/vatnode/eu-vat-rates-data-js/main/data/eu-vat-rates.json \
+          curl -sf https://raw.githubusercontent.com/vatnode/eu-vat-rates-data-js/main/data/eu-vat-rates-data.json \
             -o /tmp/latest.json
 
       - name: Check for rate changes
         id: diff
         run: |
-          CURRENT=$(python3 -c "import json,sys; print(json.dumps(json.load(open(sys.argv[1]))['rates'],sort_keys=True))" src/eu_vat_rates_data/eu_vat_rates.json)
+          CURRENT=$(python3 -c "import json,sys; print(json.dumps(json.load(open(sys.argv[1]))['rates'],sort_keys=True))" src/eu_vat_rates_data/eu_vat_rates_data.json)
           LATEST=$(python3 -c "import json,sys; print(json.dumps(json.load(open(sys.argv[1]))['rates'],sort_keys=True))" /tmp/latest.json)
           if [ "${{ github.event.inputs.force_publish }}" = "true" ]; then
             echo "rates_changed=true" >> "$GITHUB_OUTPUT"
@@ -48,7 +48,7 @@ jobs:
 
       - name: Update bundled data
         if: steps.diff.outputs.rates_changed == 'true'
-        run: cp /tmp/latest.json src/eu_vat_rates_data/eu_vat_rates.json
+        run: cp /tmp/latest.json src/eu_vat_rates_data/eu_vat_rates_data.json
 
       - name: Set up Python
         if: steps.diff.outputs.rates_changed == 'true' && github.event.inputs.dry_run != 'true'
@@ -90,6 +90,6 @@ jobs:
           VERSION=$(python3 -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])")
           git config user.name "vatnode-bot"
           git config user.email "bot@vatnode.dev"
-          git add src/eu_vat_rates_data/eu_vat_rates.json pyproject.toml
+          git add src/eu_vat_rates_data/eu_vat_rates_data.json pyproject.toml
           git diff --staged --quiet || git commit -m "chore: update VAT rates ${DATE} (v${VERSION})"
           git push

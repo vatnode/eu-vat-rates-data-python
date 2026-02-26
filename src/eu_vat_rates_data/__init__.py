@@ -43,7 +43,7 @@ class VatRate(TypedDict):
 
 
 def _load() -> dict:
-    raw = files("eu_vat_rates_data").joinpath("eu_vat_rates.json").read_text(encoding="utf-8")
+    raw = files("eu_vat_rates_data").joinpath("eu_vat_rates_data.json").read_text(encoding="utf-8")
     return json.loads(raw)
 
 
