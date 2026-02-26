@@ -2,7 +2,7 @@ name: Update EU VAT Rates
 
 on:
   schedule:
-    # Run 1 hour after the JS repo updates (which runs at 07:00 UTC)
+    # Run 1 hour after the data repo updates (which runs at 07:00 UTC)
     - cron: '0 8 * * *'
   workflow_dispatch:
     inputs:

@@ -2,7 +2,7 @@
 
 [![PyPI version](https://img.shields.io/pypi/v/eu-vat-rates-data)](https://pypi.org/project/eu-vat-rates-data/)
 [![Python versions](https://img.shields.io/pypi/pyversions/eu-vat-rates-data)](https://pypi.org/project/eu-vat-rates-data/)
-[![Last updated](https://img.shields.io/github/last-commit/vatnode/eu-vat-rates-data-python?path=src%2Feu_vat_rates_data%2Feu_vat_rates.json&label=last%20updated)](https://github.com/vatnode/eu-vat-rates-data-python/commits/main)
+[![Last updated](https://img.shields.io/github/last-commit/vatnode/eu-vat-rates-data-python?path=src%2Feu_vat_rates_data%2Feu_vat_rates_data.json&label=last%20updated)](https://github.com/vatnode/eu-vat-rates-data-python/commits/main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 EU VAT rates for all **27 EU member states** plus the **United Kingdom**, sourced from the [European Commission TEDB](https://taxation-customs.ec.europa.eu/tedb/vatRates.html). Checked daily, published automatically when rates change.
