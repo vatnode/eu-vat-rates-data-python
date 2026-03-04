@@ -10,7 +10,7 @@ readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
 authors = [{ name = "Iurii Rogulia", email = "iurii@rogulia.fi" }]
-keywords = ["vat", "eu", "european-union", "tax", "rates", "europe"]
+keywords = ["vat", "eu", "european-union", "tax", "rates", "europe", "vat-rates", "eu-vat", "vat-moss", "digital-services-tax", "billing", "e-commerce", "fintech", "invoice"]
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Developers",
