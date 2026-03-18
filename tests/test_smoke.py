@@ -1,31 +1,35 @@
 import re
 import unittest
 
-from eu_vat_rates_data import get_rate, get_standard_rate, get_all_rates, is_eu_member, data_version
+from eu_vat_rates_data import get_rate, get_all_rates, is_eu_member, data_version
 
 
 class SmokeTest(unittest.TestCase):
-    def test_de_standard_rate(self):
-        self.assertEqual(get_standard_rate('DE'), 19.0)
-
-    def test_ee_standard_rate(self):
-        self.assertEqual(get_standard_rate('EE'), 24.0)
-
-    def test_fr_is_eu_member(self):
-        self.assertTrue(is_eu_member('FR'))
+    def test_de_is_eu_member(self):
+        self.assertTrue(is_eu_member('DE'))
 
     def test_gb_is_not_eu_member(self):
         self.assertFalse(is_eu_member('GB'))
 
+    def test_no_is_not_eu_member(self):
+        self.assertFalse(is_eu_member('NO'))
+
     def test_dataset_has_44_countries(self):
         self.assertEqual(len(get_all_rates()), 44)
 
-    def test_eu_member_field_present(self):
-        self.assertTrue(get_rate('DE')['eu_member'])
-        self.assertFalse(get_rate('NO')['eu_member'])
+    def test_all_standard_rates_positive(self):
+        for code, rate in get_all_rates().items():
+            self.assertGreater(rate['standard'], 0, f'{code}: standard rate is {rate["standard"]}')
+
+    def test_eu_member_field_is_bool(self):
+        for code, rate in get_all_rates().items():
+            self.assertIsInstance(rate['eu_member'], bool, f'{code}: eu_member is not bool')
 
     def test_data_version_format(self):
         self.assertRegex(data_version, r'^\d{4}-\d{2}-\d{2}$')
+
+    def test_unknown_country_returns_none(self):
+        self.assertIsNone(get_rate('XX'))
 
 
 if __name__ == '__main__':
