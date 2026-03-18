@@ -5,12 +5,13 @@
 [![Last updated](https://img.shields.io/github/last-commit/vatnode/eu-vat-rates-data-python?path=src%2Feu_vat_rates_data%2Feu_vat_rates_data.json&label=last%20updated)](https://github.com/vatnode/eu-vat-rates-data-python/commits/main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-EU VAT rates for all **27 EU member states** plus the **United Kingdom**, sourced from the [European Commission TEDB](https://taxation-customs.ec.europa.eu/tedb/vatRates.html). Checked daily, published automatically when rates change.
+VAT rates for **44 European countries** — EU-27 plus Norway, Switzerland, UK, and more. EU rates sourced from the [European Commission TEDB](https://taxation-customs.ec.europa.eu/tedb/vatRates.html) and checked daily. Non-EU rates maintained manually.
 
 - Standard, reduced, super-reduced, and parking rates
+- `eu_member` flag on every country — `True` for EU-27, `False` for non-EU
 - Full type hints — works with mypy and pyright out of the box
 - Data embedded in the package — works offline, no network calls
-- Checked daily via GitHub Actions, new version published only when rates change
+- EU rates checked daily via GitHub Actions, new version published only when rates change
 
 Also available in: [JavaScript/TypeScript (npm)](https://www.npmjs.com/package/eu-vat-rates-data) · [PHP (Packagist)](https://packagist.org/packages/vatnode/eu-vat-rates-data) · [Go](https://pkg.go.dev/github.com/vatnode/eu-vat-rates-data-go) · [Ruby (RubyGems)](https://rubygems.org/gems/eu_vat_rates_data)
 
@@ -38,6 +39,7 @@ fi = get_rate("FI")
 # {
 #   "country": "Finland",
 #   "currency": "EUR",
+#   "eu_member": True,
 #   "standard": 25.5,
 #   "reduced": [10.0, 13.5],
 #   "super_reduced": None,
@@ -47,17 +49,17 @@ fi = get_rate("FI")
 # Just the standard rate
 get_standard_rate("DE")   # → 19.0
 
-# Type guard
+# EU membership check — False for non-EU countries (GB, NO, CH, ...)
 if is_eu_member(user_input):
-    rate = get_rate(user_input)   # always returns a dict here
+    rate = get_rate(user_input)
 
-# All 28 countries at once
+# All 44 countries at once
 all_rates = get_all_rates()
 for code, rate in all_rates.items():
     print(f"{code}: {rate['standard']}%")
 
-# When were these rates last fetched?
-print(data_version)  # e.g. "2026-02-25"
+# When were EU rates last fetched?
+print(data_version)  # e.g. "2026-03-18"
 ```
 
 ---
@@ -74,6 +76,7 @@ rate: VatRate = get_rate("FI")  # type checker knows this is a TypedDict
 class VatRate(TypedDict):
     country: str
     currency: str
+    eu_member: bool
     standard: float
     reduced: list[float]
     super_reduced: float | None
@@ -84,19 +87,20 @@ class VatRate(TypedDict):
 
 ## Data structure
 
-`reduced` may contain rates for special territories (e.g. French DOM departments, Azores/Madeira for Portugal). All values come verbatim from EC TEDB.
+`reduced` may contain rates for special territories (e.g. French DOM departments, Azores/Madeira for Portugal). For EU countries, all values come from EC TEDB.
 
 Standard ISO 3166-1 alpha-2 country codes. Greece is `GR` (TEDB internally uses `EL`, which this package normalises).
 
 ### Example
 
 ```python
-get_rate("PT")
+get_rate("NO")
 # {
-#   "country": "Portugal",
-#   "currency": "EUR",
-#   "standard": 23.0,
-#   "reduced": [6.0, 13.0],   # mainland + Azores/Madeira variants
+#   "country": "Norway",
+#   "currency": "NOK",
+#   "eu_member": False,
+#   "standard": 25.0,
+#   "reduced": [12.0, 15.0],
 #   "super_reduced": None,
 #   "parking": None
 # }
@@ -106,19 +110,21 @@ get_rate("PT")
 
 ## Data source & update frequency
 
-Rates are fetched from the **European Commission Taxes in Europe Database (TEDB)**:
-
-- Canonical data repo: **https://github.com/vatnode/eu-vat-rates-data**
-- Refreshed: **daily at 08:00 UTC**
+- EU-27 rates: **European Commission TEDB**, refreshed **daily at 08:00 UTC**
+- Non-EU rates: maintained manually, updated on official rate changes
 - Published to PyPI only when actual rates change (not on date-only updates)
 
 ---
 
 ## Covered countries
 
-EU-27 member states + United Kingdom (28 countries total):
+**EU-27** (daily auto-updates via EC TEDB):
 
-`AT` `BE` `BG` `CY` `CZ` `DE` `DK` `EE` `ES` `FI` `FR` `GB` `GR` `HR` `HU` `IE` `IT` `LT` `LU` `LV` `MT` `NL` `PL` `PT` `RO` `SE` `SI` `SK`
+`AT` `BE` `BG` `CY` `CZ` `DE` `DK` `EE` `ES` `FI` `FR` `GR` `HR` `HU` `IE` `IT` `LT` `LU` `LV` `MT` `NL` `PL` `PT` `RO` `SE` `SI` `SK`
+
+**Non-EU Europe** (manually maintained):
+
+`AD` `AL` `BA` `CH` `GB` `GE` `IS` `LI` `MC` `MD` `ME` `MK` `NO` `RS` `TR` `UA` `XK`
 
 ---
 
