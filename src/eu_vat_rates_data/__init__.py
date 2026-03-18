@@ -38,6 +38,7 @@ class VatRate(TypedDict):
     country: str
     currency: str
     eu_member: bool
+    vat_name: str
     standard: float
     reduced: list[float]
     super_reduced: Optional[float]

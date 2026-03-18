@@ -25,6 +25,11 @@ class SmokeTest(unittest.TestCase):
         for code, rate in get_all_rates().items():
             self.assertIsInstance(rate['eu_member'], bool, f'{code}: eu_member is not bool')
 
+    def test_all_vat_names_non_empty(self):
+        for code, rate in get_all_rates().items():
+            self.assertIsInstance(rate['vat_name'], str, f'{code}: vat_name is not str')
+            self.assertGreater(len(rate['vat_name']), 0, f'{code}: vat_name is empty')
+
     def test_data_version_format(self):
         self.assertRegex(data_version, r'^\d{4}-\d{2}-\d{2}$')
 
