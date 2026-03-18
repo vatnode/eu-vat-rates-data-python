@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "eu-vat-rates-data"
-version = "2026.2.25"
+version = "2026.3.18"
 description = "EU VAT rates for all 27 member states + UK. Updated daily from EC TEDB, published automatically when rates change."
 readme = "README.md"
 license = { text = "MIT" }
