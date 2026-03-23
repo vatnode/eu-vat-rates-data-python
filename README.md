@@ -9,6 +9,7 @@ VAT rates for **44 European countries** — EU-27 plus Norway, Switzerland, UK, 
 
 - Standard, reduced, super-reduced, and parking rates
 - `eu_member` flag on every country — `True` for EU-27, `False` for non-EU
+- `vat_name` — official name of the VAT tax in the country's primary official language
 - Full type hints — works with mypy and pyright out of the box
 - Data embedded in the package — works offline, no network calls
 - EU rates checked daily via GitHub Actions, new version published only when rates change
@@ -40,6 +41,7 @@ fi = get_rate("FI")
 #   "country": "Finland",
 #   "currency": "EUR",
 #   "eu_member": True,
+#   "vat_name": "Arvonlisävero",
 #   "standard": 25.5,
 #   "reduced": [10.0, 13.5],
 #   "super_reduced": None,
@@ -77,6 +79,7 @@ class VatRate(TypedDict):
     country: str
     currency: str
     eu_member: bool
+    vat_name: str
     standard: float
     reduced: list[float]
     super_reduced: float | None
@@ -99,6 +102,7 @@ get_rate("NO")
 #   "country": "Norway",
 #   "currency": "NOK",
 #   "eu_member": False,
+#   "vat_name": "Merverdiavgift",
 #   "standard": 25.0,
 #   "reduced": [12.0, 15.0],
 #   "super_reduced": None,
