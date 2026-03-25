@@ -29,6 +29,7 @@ __all__ = [
     "get_standard_rate",
     "get_all_rates",
     "is_eu_member",
+    "has_rate",
     "data_version",
     "dataset",
 ]
@@ -109,3 +110,16 @@ def is_eu_member(country_code: str) -> bool:
     """
     rate = _rates.get(country_code.upper())
     return rate["eu_member"] if rate else False
+
+def has_rate(country_code: str) -> bool:
+    """Return True if *country_code* is present in the dataset (all 44 countries).
+
+    Use :func:`is_eu_member` to check EU membership specifically.
+
+    Args:
+        country_code: ISO 3166-1 alpha-2 code.
+
+    Returns:
+        ``True`` if the country is in the dataset, ``False`` otherwise.
+    """
+    return country_code.upper() in _rates
