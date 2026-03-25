@@ -5,7 +5,7 @@
 [![Last updated](https://img.shields.io/github/last-commit/vatnode/eu-vat-rates-data-python?path=src%2Feu_vat_rates_data%2Feu_vat_rates_data.json&label=last%20updated)](https://github.com/vatnode/eu-vat-rates-data-python/commits/main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-VAT rates for **44 European countries** — EU-27 plus Norway, Switzerland, UK, and more. EU rates sourced from the [European Commission TEDB](https://taxation-customs.ec.europa.eu/tedb/vatRates.html) and checked daily. Non-EU rates maintained manually.
+VAT rates for **44 European countries** — EU-27 plus Norway, Switzerland, UK, and more. EU rates sourced from the [European Commission TEDB](https://ec.europa.eu/taxation_customs/tedb/) and checked daily. Non-EU rates maintained manually.
 
 - Standard, reduced, super-reduced, and parking rates
 - `eu_member` flag on every country — `True` for EU-27, `False` for non-EU
@@ -33,7 +33,7 @@ poetry add eu-vat-rates-data
 ## Usage
 
 ```python
-from eu_vat_rates_data import get_rate, get_standard_rate, get_all_rates, is_eu_member, data_version
+from eu_vat_rates_data import get_rate, get_standard_rate, get_all_rates, is_eu_member, has_rate, data_version
 
 # Full rate object for a country
 fi = get_rate("FI")
@@ -53,6 +53,10 @@ get_standard_rate("DE")   # → 19.0
 
 # EU membership check — False for non-EU countries (GB, NO, CH, ...)
 if is_eu_member(user_input):
+    rate = get_rate(user_input)
+
+# Dataset membership check (all 44 countries)
+if has_rate(user_input):
     rate = get_rate(user_input)
 
 # All 44 countries at once
