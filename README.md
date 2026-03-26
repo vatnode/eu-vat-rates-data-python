@@ -10,6 +10,7 @@ VAT rates for **44 European countries** — EU-27 plus Norway, Switzerland, UK, 
 - Standard, reduced, super-reduced, and parking rates
 - `eu_member` flag on every country — `True` for EU-27, `False` for non-EU
 - `vat_name` — official name of the VAT tax in the country's primary official language
+- `vat_abbr` — short abbreviation used locally (e.g. "ALV", "MwSt", "TVA")
 - Full type hints — works with mypy and pyright out of the box
 - Data embedded in the package — works offline, no network calls
 - EU rates checked daily via GitHub Actions, new version published only when rates change
@@ -42,6 +43,7 @@ fi = get_rate("FI")
 #   "currency": "EUR",
 #   "eu_member": True,
 #   "vat_name": "Arvonlisävero",
+#   "vat_abbr": "ALV",
 #   "standard": 25.5,
 #   "reduced": [10.0, 13.5],
 #   "super_reduced": None,
@@ -65,7 +67,7 @@ for code, rate in all_rates.items():
     print(f"{code}: {rate['standard']}%")
 
 # When were EU rates last fetched?
-print(data_version)  # e.g. "2026-03-18"
+print(data_version)  # e.g. "2026-03-27"
 ```
 
 ---
@@ -84,6 +86,7 @@ class VatRate(TypedDict):
     currency: str
     eu_member: bool
     vat_name: str
+    vat_abbr: str
     standard: float
     reduced: list[float]
     super_reduced: float | None
@@ -107,6 +110,7 @@ get_rate("NO")
 #   "currency": "NOK",
 #   "eu_member": False,
 #   "vat_name": "Merverdiavgift",
+#   "vat_abbr": "MVA",
 #   "standard": 25.0,
 #   "reduced": [12.0, 15.0],
 #   "super_reduced": None,
@@ -118,7 +122,7 @@ get_rate("NO")
 
 ## Data source & update frequency
 
-- EU-27 rates: **European Commission TEDB**, refreshed **daily at 08:00 UTC**
+- EU-27 rates: **European Commission TEDB**, refreshed **daily at 07:00 UTC**
 - Non-EU rates: maintained manually, updated on official rate changes
 - Published to PyPI only when actual rates change (not on date-only updates)
 
