@@ -5,7 +5,7 @@
 [![Last updated](https://img.shields.io/github/last-commit/vatnode/eu-vat-rates-data-python?path=src%2Feu_vat_rates_data%2Feu_vat_rates_data.json&label=last%20updated)](https://github.com/vatnode/eu-vat-rates-data-python/commits/main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-VAT rates for **44 European countries** — EU-27 plus Norway, Switzerland, UK, and more. EU rates sourced from the [European Commission TEDB](https://ec.europa.eu/taxation_customs/tedb/) and checked daily. Non-EU rates maintained manually.
+VAT rates for **44 European countries** — EU-27 plus Norway, Switzerland, UK, and more. EU rates sourced from the European Commission TEDB and checked daily. Non-EU rates maintained manually.
 
 - Standard, reduced, super-reduced, and parking rates
 - `eu_member` flag on every country — `True` for EU-27, `False` for non-EU
