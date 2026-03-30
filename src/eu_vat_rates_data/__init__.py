@@ -30,6 +30,7 @@ __all__ = [
     "get_all_rates",
     "is_eu_member",
     "has_rate",
+    "validate_format",
     "data_version",
     "dataset",
 ]
@@ -40,10 +41,13 @@ class VatRate(TypedDict):
     currency: str
     eu_member: bool
     vat_name: str
+    vat_abbr: str
     standard: float
     reduced: list[float]
     super_reduced: Optional[float]
     parking: Optional[float]
+    format: str
+    pattern: Optional[str]
 
 
 def _load() -> dict:
@@ -110,6 +114,29 @@ def is_eu_member(country_code: str) -> bool:
     """
     rate = _rates.get(country_code.upper())
     return rate["eu_member"] if rate else False
+
+def validate_format(vat_id: str) -> bool:
+    """Return True if *vat_id* matches the expected format for its country.
+
+    Input must include the country code prefix (e.g. ``"ATU12345678"``).
+    Returns False when the country has no standardised format or the ID
+    does not match.
+
+    Note: Greece uses the ``"EL"`` prefix, not ``"GR"``.
+
+    Args:
+        vat_id: VAT number string including country code prefix.
+
+    Returns:
+        ``True`` if the format matches, ``False`` otherwise.
+    """
+    import re
+    code = vat_id[:2].upper()
+    rate = _rates.get(code)
+    if not rate or not rate.get("pattern"):
+        return False
+    return bool(re.match(rate["pattern"], vat_id.upper()))
+
 
 def has_rate(country_code: str) -> bool:
     """Return True if *country_code* is present in the dataset (all 44 countries).

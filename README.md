@@ -11,6 +11,8 @@ VAT rates for **44 European countries** — EU-27 plus Norway, Switzerland, UK, 
 - `eu_member` flag on every country — `True` for EU-27, `False` for non-EU
 - `vat_name` — official name of the VAT tax in the country's primary official language
 - `vat_abbr` — short abbreviation used locally (e.g. "ALV", "MwSt", "TVA")
+- **`format` — human-readable VAT number format (e.g. `"ATU + 8 digits"`)** — unique to this package
+- **`pattern` — regex for VAT number validation + built-in `validate_format()` — free, no API key needed** — unique to this package
 - Full type hints — works with mypy and pyright out of the box
 - Data embedded in the package — works offline, no network calls
 - EU rates checked daily via GitHub Actions, new version published only when rates change
@@ -68,6 +70,17 @@ for code, rate in all_rates.items():
 
 # When were EU rates last fetched?
 print(data_version)  # e.g. "2026-03-27"
+
+# VAT number format validation — no API key, no network call
+from eu_vat_rates_data import validate_format
+validate_format("ATU12345678")  # → True
+validate_format("DE123456789")  # → True
+validate_format("INVALID")      # → False
+
+# Access format metadata directly
+at = get_rate("AT")
+print(at["format"])   # "ATU + 8 digits"
+print(at["pattern"])  # "^ATU\\d{8}$"
 ```
 
 ---
@@ -91,6 +104,8 @@ class VatRate(TypedDict):
     reduced: list[float]
     super_reduced: float | None
     parking: float | None
+    format: str          # "FI + 8 digits"
+    pattern: str | None  # "^FI\\d{8}$" — None if no standard format
 ```
 
 ---
