@@ -63,16 +63,15 @@ jobs:
       - name: Bump version and build
         if: steps.diff.outputs.rates_changed == 'true' && github.event.inputs.dry_run != 'true'
         run: |
-          VERSION=$(date -u +%Y.%-m.%-d)
-          # Append counter if version already published today
-          EXISTING=$(pip index versions eu-vat-rates-data 2>/dev/null | grep -oP '(?<=Available versions: )[\d.]+' || echo "")
-          if echo "$EXISTING" | grep -qw "$VERSION"; then
-            COUNT=1
-            while echo "$EXISTING" | grep -qw "${VERSION}.${COUNT}"; do
-              COUNT=$((COUNT + 1))
-            done
-            VERSION="${VERSION}.${COUNT}"
-          fi
+          YEAR=$(date -u +%Y)
+          MONTH=$(date -u +%-m)
+          DAY=$(date -u +%-d)
+          VERSION="${YEAR}.${MONTH}.${DAY}"
+          # If this version already exists on PyPI, increment the day until we find a free slot
+          while pip index versions eu-vat-rates-data 2>/dev/null | grep -q "(${VERSION},\|, ${VERSION},\|, ${VERSION})"; do
+            DAY=$((DAY + 1))
+            VERSION="${YEAR}.${MONTH}.${DAY}"
+          done
           echo "Publishing version: $VERSION"
           sed -i "s/^version = .*/version = \"$VERSION\"/" pyproject.toml
           hatch build
