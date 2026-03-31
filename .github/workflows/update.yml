@@ -68,7 +68,7 @@ jobs:
           DAY=$(date -u +%-d)
           VERSION="${YEAR}.${MONTH}.${DAY}"
           # If this version already exists on PyPI, increment the day until we find a free slot
-          while pip index versions eu-vat-rates-data 2>/dev/null | grep -q "(${VERSION},\|, ${VERSION},\|, ${VERSION})"; do
+          while curl -sf "https://pypi.org/pypi/eu-vat-rates-data/${VERSION}/json" -o /dev/null; do
             DAY=$((DAY + 1))
             VERSION="${YEAR}.${MONTH}.${DAY}"
           done
