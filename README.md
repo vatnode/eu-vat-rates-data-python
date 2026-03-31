@@ -81,6 +81,12 @@ validate_format("INVALID")      # → False
 at = get_rate("AT")
 print(at["format"])   # "ATU + 8 digits"
 print(at["pattern"])  # "^ATU\\d{8}$"
+
+# Flag emoji from a 2-letter country code — no lookup table, computed from regional indicator symbols
+from eu_vat_rates_data import get_flag
+get_flag("FI")  # => "🇫🇮"
+get_flag("DE")  # => "🇩🇪"
+get_flag("XX")  # => "" (empty string for unknown/invalid codes)
 ```
 
 ---
