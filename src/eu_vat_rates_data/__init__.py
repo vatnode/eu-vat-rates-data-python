@@ -150,3 +150,26 @@ def has_rate(country_code: str) -> bool:
         ``True`` if the country is in the dataset, ``False`` otherwise.
     """
     return country_code.upper() in _rates
+
+
+def get_flag(country_code: str) -> str:
+    """Return the flag emoji for a 2-letter ISO 3166-1 alpha-2 country code.
+
+    Computed from regional indicator symbols — no lookup table needed.
+
+    Args:
+        country_code: ISO 3166-1 alpha-2 code (e.g. ``"FI"``, ``"DE"``).
+
+    Returns:
+        Flag emoji string (e.g. ``"🇫🇮"``), or empty string if input is invalid.
+
+    Example::
+
+        get_flag("FI")  # "🇫🇮"
+        get_flag("DE")  # "🇩🇪"
+        get_flag("GB")  # "🇬🇧"
+    """
+    code = country_code.upper()
+    if len(code) != 2:
+        return ""
+    return "".join(chr(0x1F1E6 + ord(c) - ord("A")) for c in code)
