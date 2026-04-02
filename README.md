@@ -111,7 +111,7 @@ class VatRate(TypedDict):
     super_reduced: float | None
     parking: float | None
     format: str          # "FI + 8 digits"
-    pattern: str | None  # "^FI\\d{8}$" — None if no standard format
+    pattern: str         # "^FI\\d{8}$" — always present for all 44 countries
 ```
 
 ---

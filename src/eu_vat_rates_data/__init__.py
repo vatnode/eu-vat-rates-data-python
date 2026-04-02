@@ -47,7 +47,7 @@ class VatRate(TypedDict):
     super_reduced: Optional[float]
     parking: Optional[float]
     format: str
-    pattern: Optional[str]
+    pattern: str
 
 
 def _load() -> dict:
