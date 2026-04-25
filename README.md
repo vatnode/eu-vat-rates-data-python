@@ -5,7 +5,7 @@
 [![Last updated](https://img.shields.io/github/last-commit/vatnode/eu-vat-rates-data-python?path=src%2Feu_vat_rates_data%2Feu_vat_rates_data.json&label=last%20updated)](https://github.com/vatnode/eu-vat-rates-data-python/commits/main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-VAT rates for **44 European countries** — EU-27 plus Norway, Switzerland, UK, and more. EU rates sourced from the European Commission TEDB and checked daily. Non-EU rates maintained manually.
+VAT rates for **45 European countries** — EU-27 plus Norway, Switzerland, UK, and more. EU rates sourced from the European Commission TEDB and checked daily. Non-EU rates maintained manually.
 
 - Standard, reduced, super-reduced, and parking rates
 - `eu_member` flag on every country — `True` for EU-27, `False` for non-EU
@@ -59,11 +59,11 @@ get_standard_rate("DE")   # → 19.0
 if is_eu_member(user_input):
     rate = get_rate(user_input)
 
-# Dataset membership check (all 44 countries)
+# Dataset membership check (all 45 countries)
 if has_rate(user_input):
     rate = get_rate(user_input)
 
-# All 44 countries at once
+# All 45 countries at once
 all_rates = get_all_rates()
 for code, rate in all_rates.items():
     print(f"{code}: {rate['standard']}%")
@@ -111,7 +111,7 @@ class VatRate(TypedDict):
     super_reduced: float | None
     parking: float | None
     format: str          # "FI + 8 digits"
-    pattern: str         # "^FI\\d{8}$" — always present for all 44 countries
+    pattern: str         # "^FI\\d{8}$" — always present for all 45 countries
 ```
 
 ---
