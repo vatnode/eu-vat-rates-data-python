@@ -14,8 +14,8 @@ class SmokeTest(unittest.TestCase):
     def test_no_is_not_eu_member(self):
         self.assertFalse(is_eu_member('NO'))
 
-    def test_dataset_has_44_countries(self):
-        self.assertEqual(len(get_all_rates()), 44)
+    def test_dataset_has_45_countries(self):
+        self.assertEqual(len(get_all_rates()), 45)
 
     def test_all_standard_rates_positive(self):
         for code, rate in get_all_rates().items():

@@ -1,4 +1,4 @@
-"""VAT rates for 44 European countries (EU-27 + 17 non-EU).
+"""VAT rates for 45 European countries (EU-27 + 17 non-EU).
 
 EU rates sourced from the European Commission TEDB (Taxes in Europe Database),
 checked daily. Non-EU rates maintained manually.
@@ -92,7 +92,7 @@ def get_standard_rate(country_code: str) -> Optional[float]:
 
 
 def get_all_rates() -> dict[str, VatRate]:
-    """Return all 44 country rate objects keyed by ISO country code.
+    """Return all 45 country rate objects keyed by ISO country code.
 
     Returns:
         Dict mapping country code → :class:`VatRate`.
@@ -139,7 +139,7 @@ def validate_format(vat_id: str) -> bool:
 
 
 def has_rate(country_code: str) -> bool:
-    """Return True if *country_code* is present in the dataset (all 44 countries).
+    """Return True if *country_code* is present in the dataset (all 45 countries).
 
     Use :func:`is_eu_member` to check EU membership specifically.
 
