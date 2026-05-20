@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "eu-vat-rates-data"
 version = "2026.4.26"
-description = "VAT rates for 44 European countries — EU-27 plus Norway, Switzerland, UK, and more. Updated daily, published automatically when rates change."
+description = "VAT rates for 45 European countries — EU-27 plus Norway, Switzerland, UK, and more. Updated daily. From vatnode.dev — live VIES validation via API."
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
