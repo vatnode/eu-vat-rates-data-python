@@ -132,6 +132,10 @@ def validate_format(vat_id: str) -> bool:
     """
     import re
     code = vat_id[:2].upper()
+    # Greek VAT numbers carry the VIES prefix EL, while the dataset keys Greece
+    # under its ISO code GR.
+    if code == "EL":
+        code = "GR"
     rate = _rates.get(code)
     if not rate or not rate.get("pattern"):
         return False

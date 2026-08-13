@@ -1,7 +1,7 @@
 import re
 import unittest
 
-from eu_vat_rates_data import get_rate, get_all_rates, is_eu_member, data_version
+from eu_vat_rates_data import get_rate, get_all_rates, is_eu_member, data_version, validate_format
 
 
 class SmokeTest(unittest.TestCase):
@@ -39,3 +39,19 @@ class SmokeTest(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+    def test_validate_format_accepts_well_formed_ids(self):
+        self.assertTrue(validate_format('ATU12345678'))
+        self.assertTrue(validate_format('DE123456789'))
+        self.assertTrue(validate_format('atu12345678'))
+
+    def test_validate_format_rejects_malformed_input(self):
+        self.assertFalse(validate_format(''))
+        self.assertFalse(validate_format('INVALID'))
+        self.assertFalse(validate_format('DE12'))
+
+    def test_validate_format_handles_greek_el_prefix(self):
+        # Greek VAT numbers carry the VIES prefix EL while the dataset keys Greece as GR.
+        self.assertTrue(validate_format('EL123456789'))
+        self.assertTrue(validate_format('el123456789'))
+        self.assertFalse(validate_format('EL12345678'))
