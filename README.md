@@ -113,6 +113,52 @@ get_flag("XX")  # => "" (empty string for unknown/invalid codes)
 
 ---
 
+## Example: charging VAT on an invoice
+
+Rates on their own rarely answer the question you actually have, which is what
+to put on the invoice. Two rules cover most of it: charge the buyer's domestic
+rate, unless the sale is cross-border B2B inside the EU, where the reverse
+charge applies and you invoice 0%.
+
+```python
+from eu_vat_rates_data import get_standard_rate, validate_format
+
+
+def invoice_total(net_cents, seller_country, buyer_country, buyer_vat_id=None):
+    """Money in minor units (cents). Never floats."""
+    is_cross_border_b2b = (
+        buyer_country != seller_country
+        and buyer_vat_id is not None
+        and validate_format(buyer_vat_id)
+    )
+
+    if is_cross_border_b2b:
+        return {"vat_cents": 0, "total_cents": net_cents, "reverse_charge": True}
+
+    rate = get_standard_rate(buyer_country)
+    vat_cents = round(net_cents * rate / 100)
+    return {
+        "vat_cents": vat_cents,
+        "total_cents": net_cents + vat_cents,
+        "reverse_charge": False,
+    }
+
+
+# Domestic sale in Finland — 25.5%
+invoice_total(10000, "FI", "FI")
+# → {'vat_cents': 2550, 'total_cents': 12550, 'reverse_charge': False}
+
+# Finnish seller, German business buyer — reverse charge
+invoice_total(10000, "FI", "DE", "DE123456789")
+# → {'vat_cents': 0, 'total_cents': 10000, 'reverse_charge': True}
+```
+
+`validate_format()` only checks the shape of the number. Applying the reverse charge
+requires the buyer to actually be VAT-registered, which is a VIES lookup — see
+above.
+
+---
+
 ## Type hints
 
 ```python
