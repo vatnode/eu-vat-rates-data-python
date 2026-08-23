@@ -1,4 +1,4 @@
-"""VAT rates for 45 European countries (EU-27 + 17 non-EU).
+"""VAT rates for 45 European jurisdictions (EU-27 + 18 non-EU/special VAT jurisdictions).
 
 EU rates sourced from the European Commission TEDB (Taxes in Europe Database),
 checked daily. Non-EU rates maintained manually.
