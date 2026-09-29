@@ -36,6 +36,23 @@ __all__ = [
 ]
 
 
+class NameInLanguage(TypedDict):
+    name: str
+    abbr: Optional[str]
+
+
+#: Keyed by ISO 639-1 language code: every official language, plus "en".
+LocalizedName = dict[str, NameInLanguage]
+
+
+class Identifiers(TypedDict):
+    registry_authority_name: Optional[LocalizedName]
+    registry_name: Optional[LocalizedName]
+    registry_code_name: Optional[LocalizedName]
+    tax_id_name: Optional[LocalizedName]
+    vat_id_name: Optional[LocalizedName]
+
+
 class VatRate(TypedDict):
     country: str
     currency: str
@@ -48,6 +65,7 @@ class VatRate(TypedDict):
     parking: Optional[float]
     format: str
     pattern: str
+    identifiers: Identifiers
 
 
 def _load() -> dict:
