@@ -36,13 +36,8 @@ __all__ = [
 ]
 
 
-class NameInLanguage(TypedDict):
-    name: str
-    abbr: Optional[str]
-
-
 #: Keyed by ISO 639-1 language code: every official language, plus "en".
-LocalizedName = dict[str, NameInLanguage]
+LocalizedName = dict[str, str]
 
 
 class Identifiers(TypedDict):
